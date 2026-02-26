@@ -1,25 +1,19 @@
-import React, { useState, type ReactNode } from 'react';
-import type { Toast } from '../types/types';
+import { createContext, useContext } from "react";
+import type { Toast } from "../types/types";
 
-
-export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
-  const addToast = (toast: Omit<Toast, 'id'>) => {
-    
-  };
-
-  const removeToast = (id: string) => {
-    
-  };
-
-  return (
-   <>
-
-   </>
-  );
+type ToastContextType = {
+  addToast: (toast: Omit<Toast, "id">) => void;
+  removeToast: (id: string) => void;
 };
 
+export const ToastContext = createContext<ToastContextType>({
+  addToast: () => {},
+  removeToast: () => {},
+});
+
 export const useToast = () => {
-  
+  if (!ToastContext) {
+    throw new Error("useToast должен использоваться внутри ToastProvider");
+  }
+  return useContext(ToastContext);
 };
