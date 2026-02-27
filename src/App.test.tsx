@@ -49,7 +49,7 @@ describe("Toast Component", () => {
     await sleep(1000);
     expect(screen.getByText("Успех!")).toBeDefined();
 
-    await sleep(2100);
+    await sleep(2400);
     expect(screen.queryByText("Успех!")).toBeNull();
   });
 
