@@ -10,6 +10,9 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const timeoutIdMap = useRef(new Map<string, number>());
+  const [animationState, setAnimationState] = useState<
+    Record<string, "enter" | "leave">
+  >({});
 
   const addToast = (toast: Omit<Toast, "id">) => {
     const duration = toast.duration || 3000;
@@ -33,22 +36,31 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
       id: uuid(),
       ...toast,
     };
+
     setToasts((prevToasts) => [...prevToasts, newToast]);
 
     const timeoutId = setTimeout(() => {
       removeToast(newToast.id);
     }, duration);
     timeoutIdMap.current.set(newToast.id, timeoutId);
+    setAnimationState((prev) => ({ ...prev, [newToast.id]: "enter" }));
   };
 
   const removeToast = (id: string) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-
     const timeoutId = timeoutIdMap.current.get(id);
     if (timeoutId) {
       clearTimeout(timeoutId);
       timeoutIdMap.current.delete(id);
     }
+
+    setAnimationState((prev) => ({ ...prev, [id]: "leave" }));
+    setTimeout(
+      () =>
+        setToasts((prevToasts) =>
+          prevToasts.filter((toast) => toast.id !== id),
+        ),
+      300,
+    );
   };
 
   const handleClearTimeoutId = (id: string) => {
@@ -72,6 +84,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
             onRemove={removeToast}
             handleSetTimoutId={handleSetTimoutId}
             handleClearTimeoutId={handleClearTimeoutId}
+            animationState={animationState[toast.id]}
           />
         ))}
       </div>

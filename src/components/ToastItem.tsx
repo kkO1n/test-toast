@@ -6,6 +6,7 @@ interface ToastItemProps {
   onRemove: (id: string) => void;
   handleClearTimeoutId: (id: string) => void;
   handleSetTimoutId: (id: string, timeoutId: number) => void;
+  animationState: "enter" | "leave";
 }
 
 export const ToastItem: React.FC<ToastItemProps> = ({
@@ -13,6 +14,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({
   onRemove,
   handleClearTimeoutId,
   handleSetTimoutId,
+  animationState,
 }) => {
   const durationRef = useRef(toast.duration || 3000);
   const leaveTimeRef = useRef<number | null>(null);
@@ -41,7 +43,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({
 
   return (
     <div
-      className={`toast toast-${toast.type}`}
+      className={`toast toast-${toast.type} ${animationState}`}
       onMouseEnter={pause}
       onMouseLeave={resume}
     >
