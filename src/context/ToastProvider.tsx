@@ -70,7 +70,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const handleSetTimoutId = (id: string, timeoutId: number) => {
+  const handleSetTimeoutId = (id: string, timeoutId: number) => {
     timeoutIdMap.current.set(id, timeoutId);
   };
 
@@ -82,7 +82,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({
             key={toast.id}
             toast={toast}
             onRemove={removeToast}
-            handleSetTimoutId={handleSetTimoutId}
+            handleSetTimeoutId={handleSetTimeoutId}
             handleClearTimeoutId={handleClearTimeoutId}
             animationState={animationState[toast.id]}
           />
